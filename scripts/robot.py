@@ -36,7 +36,7 @@ class Robot:
         simulated_measurements = self.sense(0,0)
         probability = 1.0
         for i_sensor in range(len(simulated_measurements)):
-            probability *= self.prob_normal_distribution(simulated_measurements[i_sensor], noises[i_sensor])
+            probability *= self.prob_normal_distribution(measurements[i_sensor]-simulated_measurements[i_sensor], noises[i_sensor])
         return probability
 
         
