@@ -4,9 +4,9 @@ class Robot:
     
     def __init__(self, world_size_x, world_size_y, x = None, y = None, theta = None,):
         if x is None:
-            x = np.random.randint(0, world_size_x)
+            x = np.random.randint(world_size_x)
         if y is None:
-            y = np.random.randint(0, world_size_x)
+            y = np.random.randint(world_size_x)
         if theta is None:
             theta = np.random.randint(0, 360)
         self.world_size_x = world_size_x
@@ -21,10 +21,28 @@ class Robot:
         self.y += translation * np.sin(np.deg2rad(self.theta))
         self.x = max(min(self.world_size_x, self.x), 0)
         self.y = max(min(self.world_size_y, self.y), 0)
+
+    def sense(self, noise_straight, noise_side):
+        straight_laser = np.sqrt((self.x*np.cos(self.theta))**2 + (self.y * np.sin(self.theta))**2)
+        side_laser = np.sqrt((self.y*np.cos(self.theta))**2 + (self.x * np.sin(self.theta))**2)
+        noisy_straight = np.random.normal(straight_laser, noise_straight)
+        noisy_side = np.random.normal(side_laser, noise_side)
+        return [noisy_straight, noisy_side]
+
+    def prob_normal_distribution(self, mean, variance):
+        return 1/np.sqrt(2 * np.pi* variance)*np.exp(-mean**2/(2*variance))
+
+    def prob_measurement(self, measurements, noises):
+        simulated_measurements = self.sense(0,0)
+        probability = 1.0
+        for i_sensor in range(len(simulated_measurements)):
+            probability *= self.prob_normal_distribution(simulated_measurements[i_sensor], noises[i_sensor])
+        return probability
+
         
     def display_values(self):
         print(f"[x = {self.x:07.3f}, \t y = {self.y:07.3f}, \t theta = {self.theta:07.3f}]")
     
-    def return_state(self):
+    def state(self):
         return [self.x,self.y,self.theta]
         
