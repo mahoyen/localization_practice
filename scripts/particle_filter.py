@@ -29,14 +29,9 @@ def display_scatterplot(list_of_robots, real_robot):
     plt.show()
 
 def plot_sense_arrow(robot):
-    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
-    measurements = robot.sense(0,0)
     state = robot.state()
-    theta_rad = np.deg2rad(state[2])
-    
-    plt.arrow(state[0], state[1],-measurements[0] * np.cos(theta_rad), -measurements[0]*np.sin(theta_rad), color = 'r')
-    plt.arrow(state[0], state[1], measurements[1] * np.sin(theta_rad), -measurements[1]*np.cos(theta_rad), color = 'g')#colors[np.random.randint(7)])
-
+    plt.plot([0, state[0]], [0, state[1]], 'r-')
+    plt.plot([state[0], WORLD_SIZE['x']], [state[1], WORLD_SIZE['y']], 'g-')
 
 def move_motion_on_list_of_robots(list_of_robots, rotation, translation):
     for robot in list_of_robots:
@@ -51,7 +46,7 @@ def probabilty_after_measurement_on_list(list_of_robots, measurements, noises):
         probability = robot.prob_measurement(measurements, noises)
         sum_of_probs += probability
         prob_list.append(probability)
-    print(sum_of_probs)
+    print(prob_list)
     return np.divide(prob_list, sum_of_probs)
 
 def my_resample_list_of_robots(list_of_robots, weights):
@@ -86,14 +81,14 @@ def np_resample_list_of_robots(list_of_robots, weights):
 
 
 WORLD_SIZE = {'x': 100, 'y': 100}
-N_PARTICLES = 1
+N_PARTICLES = 100
 PLOT_MARGIN = 20
 
 NOISE_STRAIGHT = 5
 NOISE_SIDE = NOISE_STRAIGHT
 
-rotations = [45, 45, 45, 45]
-translations = [0, 0, 0, 0]
+rotations = [45, 45, 45, 170]
+translations = [10, 30, 20, 5]
 
 real_robot = Robot(WORLD_SIZE['x'], WORLD_SIZE['y'], 75,75,0)
 
@@ -104,6 +99,7 @@ for time_step in range(len(rotations)):
     noisy_meas = real_robot.sense(NOISE_STRAIGHT, NOISE_SIDE)
     particles_of_robots = move_motion_on_list_of_robots(particles_of_robots, rotations[time_step], translations[time_step])
     weights = probabilty_after_measurement_on_list(particles_of_robots, noisy_meas, [NOISE_STRAIGHT, NOISE_SIDE])
+    print(weights)
     particles_of_robots = np_resample_list_of_robots(particles_of_robots, weights)
     
     display_scatterplot(particles_of_robots, real_robot)

@@ -23,15 +23,8 @@ class Robot:
         self.y = max(min(self.world_size_y, self.y), 0)
 
     def sense(self, noise_straight, noise_side):
-        x_straight_laser = self.x/np.cos(self.theta)
-        y_straight_laser = self.y/np.sin(self.theta)
-
-        straight_laser = min(x_straight_laser, y_straight_laser)
-
-        x_side_laser = (self.world_size_x-self.x)/np.sin(self.theta)
-        y_side_laser = self.y/np.cos(self.theta)
-
-        side_laser = min(x_side_laser, y_side_laser)     
+        straight_laser = np.sqrt(self.x**2+self.y**2)
+        side_laser = np.sqrt((self.world_size_x-self.x)**2+(self.world_size_y-self.y)**2)   
 
         # print(f"theta: {self.theta}")
         # if (self.theta > 45 and self.theta < 135) or (self.theta < 315 and self.theta > 225):
