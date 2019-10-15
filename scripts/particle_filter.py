@@ -86,7 +86,7 @@ def np_resample_list_of_robots(list_of_robots, weights):
 
 
 WORLD_SIZE = {'x': 100, 'y': 100}
-N_PARTICLES = 1
+N_PARTICLES = 100
 PLOT_MARGIN = 20
 
 NOISE_STRAIGHT = 5
