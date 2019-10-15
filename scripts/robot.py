@@ -23,20 +23,29 @@ class Robot:
         self.y = max(min(self.world_size_y, self.y), 0)
 
     def sense(self, noise_straight, noise_side):
-        straight_laser = np.sqrt((self.x*np.cos(self.theta))**2 + (self.y * np.sin(self.theta))**2)
-        side_laser = np.sqrt((self.y*np.cos(self.theta))**2 + (self.x * np.sin(self.theta))**2)
+        if (self.theta > 45 and self.theta < 135) or (self.theta < 315 and self.theta > 225):
+            straight_laser = abs(self.y/np.sin(self.theta))
+            side_laser = abs(self.x/np.sin(self.theta))
+            print(f"sin: {np.sin(self.theta)}")
+        else:
+            straight_laser = abs(self.y/np.cos(self.theta))
+            side_laser = abs(self.x/np.cos(self.theta))
+            print(f"cos {np.cos(self.theta)}")
+
+        print(f"straight {straight_laser}, side {side_laser}")
+        print(f"x        {self.x}, y     {self.y}")
         noisy_straight = np.random.normal(straight_laser, noise_straight)
         noisy_side = np.random.normal(side_laser, noise_side)
         return [noisy_straight, noisy_side]
 
-    def prob_normal_distribution(self, mean, variance):
-        return 1/np.sqrt(2 * np.pi* variance)*np.exp(-mean**2/(2*variance))
+    def prob_normal_distribution(self, x, mean, variance):
+        return 1/np.sqrt(2 * np.pi* variance)*np.exp(-(x-mean)**2/(2*variance))
 
     def prob_measurement(self, measurements, noises):
         simulated_measurements = self.sense(0,0)
         probability = 1.0
         for i_sensor in range(len(simulated_measurements)):
-            probability *= self.prob_normal_distribution(measurements[i_sensor]-simulated_measurements[i_sensor], noises[i_sensor])
+            probability *= self.prob_normal_distribution(measurements[i_sensor],simulated_measurements[i_sensor], noises[i_sensor])
         return probability
 
         
