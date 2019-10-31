@@ -103,9 +103,9 @@ real_robot = Robot(WORLD_SIZE['x'], WORLD_SIZE['y'], 75,75,0)
 particles_of_robots = generate_list_of_robots(N_PARTICLES, WORLD_SIZE['x'], WORLD_SIZE['y'], False)
 display_scatterplot(particles_of_robots, real_robot)
 for time_step in range(len(rotations)):
-    real_robot.move(rotations[time_step], translations[time_step])
+    real_robot.move(rotations[time_step], translations[time_step], MOTION_NOISE)
     noisy_meas = real_robot.sense(NOISE_STRAIGHT, NOISE_SIDE)
-    particles_of_robots = move_motion_on_list_of_robots(particles_of_robots, rotations[time_step], translations[time_step])
+    particles_of_robots = move_motion_on_list_of_robots(particles_of_robots, rotations[time_step], translations[time_step], MOTION_NOISE)
     weights = probabilty_after_measurement_on_list(particles_of_robots, noisy_meas, [NOISE_STRAIGHT, NOISE_SIDE])
     particles_of_robots = np_resample_list_of_robots(particles_of_robots, weights)
     
