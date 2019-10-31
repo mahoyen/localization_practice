@@ -38,9 +38,9 @@ def plot_sense_arrow(robot):
     plt.arrow(state[0], state[1], measurements[1] * np.sin(theta_rad), -measurements[1]*np.cos(theta_rad), color = 'g')#colors[np.random.randint(7)])
 
 
-def move_motion_on_list_of_robots(list_of_robots, rotation, translation):
+def move_motion_on_list_of_robots(list_of_robots, rotation, translation, motion_noise):
     for robot in list_of_robots:
-        robot.move(rotation, translation)
+        robot.move(rotation, translation, motion_noise)
     return list_of_robots
 
 def probabilty_after_measurement_on_list(list_of_robots, measurements, noises):

@@ -16,7 +16,7 @@ class Robot:
         self.theta = float(theta % 360)
     
     def move(self, rotation, translation, motion_noise):
-        self.theta = np.random.normal((self.theta + rotation) % 360,, motion_noise) 
+        self.theta = np.random.normal((self.theta + rotation) % 360, motion_noise) 
         self.x += np.random.normal(translation * np.cos(np.deg2rad(self.theta)), motion_noise)
         self.y += np.random.normal(translation * np.sin(np.deg2rad(self.theta)), motion_noise)
         self.x = max(min(self.world_size_x, self.x), 0)
