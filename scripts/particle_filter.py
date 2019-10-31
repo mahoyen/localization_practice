@@ -91,6 +91,9 @@ PLOT_MARGIN = 20
 
 NOISE_STRAIGHT = 5
 NOISE_SIDE = NOISE_STRAIGHT
+MOTION_NOISE = 3
+
+RESAMPLING_NOISE = 7
 
 rotations = [45, 45, 45, 45]
 translations = [0, 0, 0, 0]
